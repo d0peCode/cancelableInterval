@@ -1,7 +1,7 @@
 # cancelable interval #
 ### Why? ###
 When you have interval with asynchronous 
-code inside and you need to prevent interval to not be executed again before asynchronous code in previous 
+code inside and you need to prevent interval from being called again before asynchronous code in previous 
 iteration is completed you need to [`clearInterval` by its id at the top of interval function body and then 
 start it again and reassign id at the end of it.](https://gist.github.com/d0peCode/708016b96965cbf82cc81c96d0fed85c)
 
