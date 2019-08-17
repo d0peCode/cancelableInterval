@@ -1,11 +1,15 @@
 # cancelable interval #
 ### Why? ###
-Sometimes you have interval with asynchronous 
-code inside and you need to prevent interval to not be executed again before previous iteration is not completed. 
-This is especially necessary when additionally your asynchronous code may run longer than interval gap time.
+When you have interval with asynchronous 
+code inside and you need to prevent interval to not be executed again before asynchronous code in previous 
+iteration is completed you need to `clearInterval` by its id at the top of interval function body and then 
+reassign id at the end of it. 
 
-### How? ###
-Providing little function which works like `setInterval` but return `cancel` function instead of its id.
+Issue with this is that you will never be able to stop such mechanism because its id will be reassign over and over again.
+
+Solution is to have a function which will act like `setInterval` but additionally provide cancellation feature and actually return `cancel` function instead of interval id.
+
+This is what this little project aim for.
 
 ### Usage demo ###
 
@@ -13,20 +17,26 @@ Providing little function which works like `setInterval` but return `cancel` fun
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     
     const foo = () => {
-        const intervalId = async() => {
+        const intervalFunction = async() => {
             console.log('interval executed');
             await sleep(120); //some long action
         };
-        return cancelableInterval(intervalId, 100); //returning id
+        return cancelableInterval(intervalFunction, 100); //returning id
     };
     
     (() => {
-        const intervalIds = [];
-        intervalIds.push(foo());
+        const cancellableIntervals = [];
+        cancellableIntervals.push(foo());
     
         setTimeout(() => {
             console.log("Cancelling 100ms interval with 120ms of async code runtime after 700ms.");
             console.log("(100ms + 120ms) * 5 = 660ms so interval should run 3 times.");
-            intervalIds.forEach(cancel => { cancel() });
+            cancellableIntervals.forEach(cancel => { cancel() });
         }, 700)
     })();
+    
+  `sleep` function is just to simulate asynchronous code which runtime is longer than interval time gap.
+  
+  In above code I have `foo` function which contains interval' function and execute `cancelableInterval` which return
+  `cancel()`. Then in IIFE I'm executing `foo` and pushing its `cancel()` to `cancellableIntervals` array. After 700ms I'm cancelling every
+  element of `cancellableIntervals` (one in example for simplicity).
