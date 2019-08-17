@@ -10,12 +10,12 @@ const foo = () => {
 };
 
 (() => {
-    const intervalIds = [];
-    intervalIds.push(foo());
+    const cancellableIntervals = [];
+    cancellableIntervals.push(foo());
 
     setTimeout(() => {
         console.log("Cancelling 100ms interval with 120ms of async code runtime after 700ms.");
         console.log("(100ms + 120ms) * 5 = 660ms so interval should run 3 times.");
-        intervalIds.forEach(cancel => { cancel() });
+        cancellableIntervals.forEach(cancel => { cancel() });
     }, 700)
 })();
