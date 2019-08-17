@@ -2,11 +2,11 @@ const cancelableInterval = require('../dist/cancelableInterval');
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const foo = () => {
-    const intervalId = async() => {
+    const intervalFunction = async() => {
         console.log('interval executed');
         await sleep(120); //some long action
     };
-    return cancelableInterval(intervalId, 100); //returning id
+    return cancelableInterval(intervalFunction, 100); //returning id
 };
 
 (() => {
