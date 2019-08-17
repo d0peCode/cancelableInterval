@@ -3,10 +3,8 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const foo = () => {
     const intervalId = async() => {
+        console.log('interval executed');
         await sleep(120); //some long action
-        console.log('interval async');
-        // If you had more logic here, you could short-circuit it by checking token.cancelled
-        // If you wanted not to continue the timer, you'd call cancel here
     };
     return cancelableInterval(intervalId, 100); //returning id
 };
