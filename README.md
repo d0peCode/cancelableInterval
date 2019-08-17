@@ -5,7 +5,7 @@ code inside and you need to prevent interval to not be executed again before asy
 iteration is completed you need to [`clearInterval` by its id at the top of interval function body and then 
 start it again and reassign id at the end of it.](https://gist.github.com/d0peCode/708016b96965cbf82cc81c96d0fed85c)
 
-Issue with this is that you will never be able to stop such mechanism because its id will be reassign over and over again.
+Issue with this is that you will never be able to stop such mechanism even when you return id because its id will be reassign over and over again.
 
 Solution is to have a function which will act like `setInterval` but additionally provide cancellation feature and actually return `cancel` function instead of interval id.
 
